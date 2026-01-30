@@ -1,4 +1,9 @@
 {
+  "allowedMcpServers": [
+    { "serverName": "fetch" },
+    { "serverName": "brave-search" },
+    { "serverName": "naver-search" }
+  ],
   "enabledPlugins": {
     "code-review@claude-plugins-official": false,
     "typescript-lsp@claude-plugins-official": false,
