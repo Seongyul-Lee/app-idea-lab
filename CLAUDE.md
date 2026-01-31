@@ -10,9 +10,18 @@
 - 모든 문서는 한국어로 작성
 
 ## 기술 스택 제약
-- React Native + TypeScript
+- Expo Managed Workflow + React Native + TypeScript
 - Supabase (PostgreSQL)
 - 외부 파트너십 없이 혼자 구현 가능해야 함
+
+## 타겟 플랫폼
+- iOS / Android 모두 배포
+
+## 개발 환경
+- OS: Windows 11
+- 개발·디버깅: Android 에뮬레이터 + Expo DevTools + Chrome Remote Debugger
+- iOS 빌드: EAS Build (클라우드)
+- iOS 검증: 배포 전 실기기로 최종 검증
 
 ## 평가 우선순위
 1. 1-3개월 내 MVP 출시 가능 여부
@@ -24,6 +33,7 @@
 - 법적 인허가가 필수이거나 규제가 까다로운 영역 (의료, 금융 등)
 - 기업/기관과의 협약이 필수인 아이디어
 - 1인 개발로 구현이 불가능한 아이디어 (예: 다중 쇼핑몰 매출/재고 관리 서비스 — 수십~수백 개 API 연동 및 기업 협약 필요)
+- 기술 스택 부적합: RN + Supabase로 구현 불가, macOS 빌드 환경 필수, 또는 플랫폼 전용 API(HealthKit, ARKit 등)에 핵심이 의존하는 아이디어
 
 ## PRD의 최종 목표
 이 프로젝트에서 채택(adopted)된 PRD 문서는 **Task Master(또는 동등한 태스크 분해 도구)에 투입하여 즉시 개발 작업으로 분해할 수 있는 수준**이어야 한다. 즉, PRD만으로 별도의 추가 설계 없이 개발 태스크를 생성하고 착수할 수 있어야 한다.

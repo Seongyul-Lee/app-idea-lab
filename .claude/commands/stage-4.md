@@ -27,7 +27,9 @@ PRD와 2단계 산출물을 모두 읽은 뒤, 아래 4개 영역을 직접 검�
 - 외부 API·플랫폼 의존성 리스크가 관리 가능한가
 
 ### C. 기술 검증
-- React Native + TypeScript + Supabase로 명세된 기능이 구현 가능한가
+- Expo + React Native + TypeScript + Supabase로 명세된 기능이 구현 가능한가
+- PRD의 기술 선택이 project-init 고정 기술 스택(Expo Router, Zustand, MMKV, op-sqlite 등)을 준수하는가
+- Windows 11 + EAS Build 환경에서 개발·테스트·빌드가 가능한가 (macOS 필수 도구·iOS 전용 API 과의존 여부)
 - 1인 개발 규모에 과도한 복잡성은 없는가
 - 3개월 MVP 범위가 현실적인가
 - DB 스키마·API 설계가 요구사항과 정합한가
