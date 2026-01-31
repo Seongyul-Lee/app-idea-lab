@@ -9,14 +9,53 @@
 - `ideas/NNN-아이디어명.md` — 평가 완료 아이디어 문서
 - `research/competitors/NNN-경쟁분석.md` — 경쟁사 분석
 - `research/market-data/NNN-시장분석.md` — 시장 분석
+- `ideas/NNN-아이디어명-review.md` — (3단계 회귀 시) 4단계 판별 보고서
+- `ideas/NNN-아이디어명-prd.md` — (3단계 회귀 시) 기존 PRD 문서
 
 ## 사용 도구
 | 도구 | 역할 |
 |------|------|
 | Skill: `sc:design` | Technical Architecture 섹션(시스템 구조, DB 스키마, API 설계, 오프라인 설계) 작성 |
 
+## 실행 워크플로우
+아래 단계를 순서대로 **모두** 실행한다. 어떤 단계도 생략하지 않는다.
+
+### Step 1: 입력 문서 읽기
+- 입력 섹션의 모든 파일을 읽는다 (존재하지 않는 파일은 건너뛴다)
+- `ideas/NNN-아이디어명-review.md`가 존재하면 **반드시** 읽고, 수정 지침(수정 대상·결함 내용·수정 방향)을 파악한다
+
+### Step 2: 회귀 여부 판단
+- **review 파일이 존재하고 "3단계 회귀" 판정인 경우 → 기존 PRD 수정 모드**
+  - 기존 `ideas/NNN-아이디어명-prd.md`를 읽는다
+  - review 보고서의 수정 지침에 해당하는 섹션만 수정·보완한다
+  - 수정 완료 후 **Step 6(자체 점검)으로 이동**한다
+- **review 파일이 없는 경우 → 신규 작성 모드** (Step 3부터 순서대로 진행)
+
+### Step 3: 섹션 1~6 작성
+- 아래 "PRD 작성 구조"의 섹션 1~6을 작성한다
+
+### Step 4: sc:design 호출 → 섹션 7 작성
+- 아래 "sc:design 호출 지침"에 따라 `sc:design`을 1회 호출한다
+- 출력물을 PRD 섹션 7(Technical Architecture)에 통합한다
+
+### Step 5: 섹션 8~15 작성
+- sc:design 출력을 섹션 7에 통합한 **직후**, 아래 섹션을 **연속으로** 작성한다
+- **중단하거나 사용자 확인을 기다리지 않는다**
+  - 8\. Screen Map & UI 명세
+  - 9\. Competitive Differentiation
+  - 10\. Monetization Strategy
+  - 11\. Risk Matrix
+  - 12\. Assumptions & Constraints
+  - 13\. Out of Scope
+  - 14\. MVP Roadmap
+  - 15\. Success Metrics
+
+### Step 6: 자체 점검
+- 아래 "작성 완료 후 자체 점검" 항목을 **모두** 대조 확인한다
+- 미충족 항목이 있으면 해당 섹션을 보완한 뒤 완료 처리한다
+
 ## PRD 작성 구조
-입력 문서를 모두 읽은 뒤, 아래 15개 섹션으로 PRD를 작성한다. 각 섹션에서 2단계 산출물(시장분석·경쟁분석)의 데이터를 근거로 인용한다.
+아래 15개 섹션으로 PRD를 작성한다. 각 섹션에서 2단계 산출물(시장분석·경쟁분석)의 데이터를 근거로 인용한다.
 
 1. **Executive Summary** — 핵심 가치 제안 한 문단
 2. **Problem Statement** — 2단계 시장분석 기반, 구체적 pain point 기술
@@ -55,9 +94,42 @@
 - 1인 개발 규모에 적합한 설계
 - 3개월 MVP 출시 가능한 범위로 한정
 
+### project-init 고정 기술 스택 (필수 준수)
+PRD의 Section 7-1 기술 선택은 아래 고정 스택을 **반드시 따라야 한다.** 이 목록은 project-init(프로젝트 초기화 도구)이 scaffold 시 항상 설치하는 패키지이며, PRD가 다른 기술을 선택하면 scaffold와 불일치가 발생한다.
+
+| 레이어 | 고정 기술 | 비고 |
+|---|---|---|
+| 프레임워크 | Expo Managed Workflow (SDK 최신 안정 버전) | |
+| 언어 | TypeScript (strict mode) | |
+| 라우팅 | Expo Router (파일 기반) | React Navigation 사용 금지 |
+| UI | React Native Paper | Tamagui, NativeBase 등 사용 금지 |
+| 상태 관리 | Zustand | Jotai, Redux Toolkit 등 사용 금지 |
+| 백엔드 | Supabase (PostgreSQL + Auth + Edge Functions + Storage) | |
+| 로컬 KV | react-native-mmkv | AsyncStorage 사용 금지 |
+| 로컬 DB (필요 시) | op-sqlite | WatermelonDB 사용 금지 (1인 개발 규모 부적합) |
+
+### project-init 조건부 의존성 (선택 가능 범위)
+PRD가 아래 기술을 필요로 하는 경우, **이 테이블에 있는 기술만** 선택해야 한다. 테이블에 없는 기술을 선택하면 scaffold가 해당 패키지를 설치하지 못한다.
+
+| 영역 | 사용 가능한 기술 |
+|---|---|
+| 인증 | Kakao OAuth, Google OAuth, Apple Auth, Naver OAuth |
+| 알림 | expo-notifications (Push Notification) |
+| 분석 | Firebase Analytics, Aptabase |
+| 결제 | react-native-iap, RevenueCat |
+| 차트 | Gifted Charts (SVG 기반), Victory Native (Skia 기반) |
+| UI 컴포넌트 | react-native-calendars, DateTimePicker, react-native-svg |
+| 미디어/디바이스 | expo-image-picker, expo-camera, expo-haptics |
+| 애니메이션 | Lottie |
+
+> **이 테이블에 없는 기술이 반드시 필요한 경우**, PRD Section 12 (Assumptions & Constraints)에 "project-init 조건부 매핑 미지원 — 수동 설치 필요" 항목으로 명시한다.
+
 ### sc:design 호출 지침
 - 호출 시점: 섹션 1~6 작성 완료 후
-- 입력 컨텍스트: Functional Requirements(P0/P1), Non-functional Requirements, 기술 설계 제약을 전달
+- 입력 컨텍스트: Functional Requirements(P0/P1), Non-functional Requirements, **기술 설계 제약 + project-init 고정 기술 스택 + 조건부 의존성 테이블**을 전달
+- **sc:design에 아래 제약을 명시적으로 전달한다:**
+  - "Section 7-1 기술 선택은 위의 '고정 기술 스택' 테이블을 따를 것"
+  - "조건부 기술은 '조건부 의존성' 테이블에 있는 기술 중에서 선택할 것"
 - 출력: 기술 스택, 시스템 구조도, 오프라인 설계, DB 스키마(CREATE TABLE SQL 포함), API 설계(TypeScript 인터페이스 포함), 상태 관리 구조, 기능-테이블-API 매핑표
 - **출력물은 반드시 PRD 문서의 섹션 7 본문에 직접 작성한다. 별도의 Technical Architecture 파일을 생성하지 않는다.**
 
