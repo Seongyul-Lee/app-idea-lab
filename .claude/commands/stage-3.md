@@ -55,9 +55,42 @@
 - 1인 개발 규모에 적합한 설계
 - 3개월 MVP 출시 가능한 범위로 한정
 
+### project-init 고정 기술 스택 (필수 준수)
+PRD의 Section 7-1 기술 선택은 아래 고정 스택을 **반드시 따라야 한다.** 이 목록은 project-init(프로젝트 초기화 도구)이 scaffold 시 항상 설치하는 패키지이며, PRD가 다른 기술을 선택하면 scaffold와 불일치가 발생한다.
+
+| 레이어 | 고정 기술 | 비고 |
+|---|---|---|
+| 프레임워크 | Expo Managed Workflow (SDK 최신 안정 버전) | |
+| 언어 | TypeScript (strict mode) | |
+| 라우팅 | Expo Router (파일 기반) | React Navigation 사용 금지 |
+| UI | React Native Paper | Tamagui, NativeBase 등 사용 금지 |
+| 상태 관리 | Zustand | Jotai, Redux Toolkit 등 사용 금지 |
+| 백엔드 | Supabase (PostgreSQL + Auth + Edge Functions + Storage) | |
+| 로컬 KV | react-native-mmkv | AsyncStorage 사용 금지 |
+| 로컬 DB (필요 시) | op-sqlite | WatermelonDB 사용 금지 (1인 개발 규모 부적합) |
+
+### project-init 조건부 의존성 (선택 가능 범위)
+PRD가 아래 기술을 필요로 하는 경우, **이 테이블에 있는 기술만** 선택해야 한다. 테이블에 없는 기술을 선택하면 scaffold가 해당 패키지를 설치하지 못한다.
+
+| 영역 | 사용 가능한 기술 |
+|---|---|
+| 인증 | Kakao OAuth, Google OAuth, Apple Auth, Naver OAuth |
+| 알림 | expo-notifications (Push Notification) |
+| 분석 | Firebase Analytics, Aptabase |
+| 결제 | react-native-iap, RevenueCat |
+| 차트 | Gifted Charts (SVG 기반), Victory Native (Skia 기반) |
+| UI 컴포넌트 | react-native-calendars, DateTimePicker, react-native-svg |
+| 미디어/디바이스 | expo-image-picker, expo-camera, expo-haptics |
+| 애니메이션 | Lottie |
+
+> **이 테이블에 없는 기술이 반드시 필요한 경우**, PRD Section 12 (Assumptions & Constraints)에 "project-init 조건부 매핑 미지원 — 수동 설치 필요" 항목으로 명시한다.
+
 ### sc:design 호출 지침
 - 호출 시점: 섹션 1~6 작성 완료 후
-- 입력 컨텍스트: Functional Requirements(P0/P1), Non-functional Requirements, 기술 설계 제약을 전달
+- 입력 컨텍스트: Functional Requirements(P0/P1), Non-functional Requirements, **기술 설계 제약 + project-init 고정 기술 스택 + 조건부 의존성 테이블**을 전달
+- **sc:design에 아래 제약을 명시적으로 전달한다:**
+  - "Section 7-1 기술 선택은 위의 '고정 기술 스택' 테이블을 따를 것"
+  - "조건부 기술은 '조건부 의존성' 테이블에 있는 기술 중에서 선택할 것"
 - 출력: 기술 스택, 시스템 구조도, 오프라인 설계, DB 스키마(CREATE TABLE SQL 포함), API 설계(TypeScript 인터페이스 포함), 상태 관리 구조, 기능-테이블-API 매핑표
 - 출력물을 PRD 섹션 7에 통합
 
